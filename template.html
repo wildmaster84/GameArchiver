@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <style>
+        .banner {
+            position: relative;
+            width: -webkit-fill-available;
+        }
+
+        .background-image {
+            width: 100%;
+            height: auto;
+            filter: blur(8px);
+        }
+
+        .overlay-image {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 10%;
+            height: auto;
+        }
+
+        .game-title {
+            position: absolute;
+            top: 1%;
+            left: 16%;
+            font-size: xxx-large;
+        }
+
+        .publisher {
+            position: absolute;
+            top: 17%;
+            left: 16%;
+            font-size: xx-large;
+        }
+        .gallerytxt{
+            position: relative;
+            left: 1%;
+            color: white;
+            font-size: 25px;
+            max-width: 100%;
+            margin-top: 2%;
+        }
+
+        .description {
+            position: relative;
+            top: 17%;
+            left: 1.4%;
+            color: white;
+            font-size: 15px;
+            max-width: 35%;
+        }
+
+        .desc {
+            position: relative;
+            top: 17%;
+            left: 1.4%;
+            color: white;
+            font-size: 25px;
+            max-width: 35%;
+        }
+
+        .descTable {
+            border-collapse: collapse;
+            width: 45%;
+            position: relative;
+            top: 17%;
+            left: 1%;
+        }
+
+        .xeniaTable {
+            border-collapse: collapse;
+            position: relative;
+            left: 5%;
+            text-align: center;
+        }
+
+        .gameDesc {
+            border-collapse: collapse;
+            width: 80%;
+            position: absolute;
+            top: 16%;
+            left: 1%;
+        }
+
+        .xeniaDesc {
+            border-collapse: collapse;
+            width: 80%;
+            position: absolute;
+            top: 16%;
+            left: 50%;
+        }
+
+        .container {
+            width: 100%;
+            position: sticky;
+        }
+
+        td,
+        th {
+            border: transparent;
+            text-align: left;
+            padding: 8px;
+            color: white;
+        }
+
+        button {
+            border: transparent;
+            border-radius: 25px;
+            text-align: left;
+            padding: 5px 15px;
+            background-color: rgb(52 58 61);
+            color: white;
+            font-size: large;
+        }
+
+        tr:nth-child(even) {
+            background-color: none;
+        }
+
+        .gallery-container {
+            margin-left: 2%;
+            overflow-x: auto;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .gallery {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .gallery img {
+            width: 300px;
+            height: 200px;
+            display: inline-block;
+            margin-right: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item {
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .gallery img {
+                width: 200px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery img {
+                width: 150px;
+                height: 100px;
+            }
+        }
+    </style>
+    <script>
+        function openInNewTab(url) {
+            window.open(url, '_blank').focus();
+        }
+    </script>
+</head>
+
+<body style="background:black;height:100%;font-family: arial, sans-serif;overflow-x: clip;">
+    <div class="banner">
+        <img src="./banner.png"
+            class="background-image">
+        <img src="./boxartlg.jpg"
+            class="overlay-image">
+        <p class="game-title" style="color:white">{title}</p>
+        <p class="publisher" style="color:gray">{developerName}</p>
+    </div>
+    <br>
+    <div class="container">
+        <div class="gameDesc">
+            <h1 class="desc">Description</h1>
+            <p class="description">{description}</p>
+            <table class="descTable">
+                <tr>
+                    <th>Published by</th>
+                    <th>Developed by</th>
+                    <th>Release date</th>
+                </tr>
+                <tr>
+                    <td>{publisherName}</td>
+                    <td>{developerName}</td>
+                    <td>{releaseDate}</td>
+                </tr>
+            </table>
+            <h1 class="gallerytxt">Gallery</h1>
+            <div class="gallery-container">
+                <div class="gallery">
+                    {gallery}
+                </div>
+            </div>
+        </div>
+        <div class="xeniaDesc">
+            <h1 class="desc">Xenia</h1>
+            <p class="description">Xenia is an experimental emulator for the Xbox 360. For more information, see the Xenia wiki.</p>
+            <table class="xeniaTable">
+                <tr>
+                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{id}')">Xenia</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{id}')">Xenia Canary</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%20{id}&type=code')">Find patches</button></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br>
+    <br>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a5c91b8abccbfa8',t:'MTcyMTQxMTU4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a5d22404ce47bbd',t:'MTcyMTQxNzUwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

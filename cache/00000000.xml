@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:feed xmlns:a="http://www.w3.org/2005/Atom" xmlns="http://marketplace.xboxlive.com/resource/product/v1">
+  <a:entry itemNum="1" xmlns:a="http://www.w3.org/2005/Atom" xmlns="http://marketplace.xboxlive.com/resource/product/v1">
+    <fullTitle>Indie Game</fullTitle>
+    <fullDescription>This game has not been archived!</fullDescription>
+    <globalOriginalReleaseDate>1997-01-01T00:00:00</globalOriginalReleaseDate>
+    <ratingId>30</ratingId>
+    <ratingDescriptors>
+      <ratingDescriptor level="1.0000">2</ratingDescriptor>
+      <ratingDescriptor level="1.0000">12</ratingDescriptor>
+      <ratingDescriptor level="1.0000">26</ratingDescriptor>
+      <ratingDescriptor level="1.0000">31</ratingDescriptor>
+    </ratingDescriptors>
+    <developerName>N/A</developerName>
+    <publisherName>N/A</publisherName>
+    <gameCapabilities>
+      <offlineMaxHDTVModeId>1</offlineMaxHDTVModeId>
+      <offlineDolbyDigital>1</offlineDolbyDigital>
+      <onlineLeaderboards>1</onlineLeaderboards>
+    </gameCapabilities>
+    <images>
+      <image>
+        <fileUrl>http://example.com/tile.png</fileUrl>
+      </image>
+      <image>
+        <fileUrl>http://example.com/background.jpg</fileUrl>
+      </image>
+      <image>
+        <fileUrl>http://example.com/boxartlg.jpg</fileUrl>
+      </image>
+      <image>
+        <fileUrl>http://example.com/banner.png</fileUrl>
+      </image>
+      <image>
+        <fileUrl>http://example.com/boxartsm.jpg</fileUrl>
+      </image>
+    </images>
+    <slideShows>
+      <slideShow>
+        <image>
+          <fileUrl>http://example.com/screenlg1.jpg</fileUrl>
+        </image>
+      </slideShow>
+    </slideShows>
+  </a:entry>
+</a:feed>

@@ -22,7 +22,9 @@ def fetch_xml_from_url(url, titleId, max_retries=5, backoff_factor=1):
                 with open(cache, 'wb') as file:
                     file.write(response.content)
             
-                return response.text
+                with open(cache, 'r', encoding='utf-8') as file:
+                    return file.read()
+                
             except requests.RequestException as e:
                 retries += 1
                 wait_time = backoff_factor * retries

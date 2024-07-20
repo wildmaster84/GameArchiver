@@ -81,13 +81,6 @@
             left: 5%;
             text-align: center;
         }
-		
-		.capabilitiesTable {
-            border-collapse: collapse;
-            position: relative;
-            left: 5%;
-            text-align: center;
-        }
 
         .gameDesc {
             border-collapse: collapse;
@@ -182,11 +175,11 @@
 <body style="background:black;height:100%;font-family: arial, sans-serif;overflow-x: clip;">
     <div class="banner">
         <img src="./background.jpg"
-            class="background-image">
+            class="background-image" alt="">
         <img src="./boxartlg.jpg"
-            class="overlay-image">
-        <p class="game-title" style="color:white">N/A</p>
-        <p class="publisher" style="color:gray">N/A</p>
+            class="overlay-image" alt="">
+        <p class="game-title" style="color:white">Indie Game</p>
+        <p class="publisher" style="color:lightgray">N/A</p>
     </div>
     <br>
     <div class="container">
@@ -208,7 +201,7 @@
             <h1 class="gallerytxt">Gallery</h1>
             <div class="gallery-container">
                 <div class="gallery">
-                    <div class="gallery-item"><img src="./screenlg1.jpg"></div>
+                    <div class="gallery-item"><img src="./screenlg1.jpg" alt="image"></div>
                 </div>
             </div>
         </div>
@@ -217,22 +210,21 @@
             <p class="description">Xenia is an experimental emulator for the Xbox 360. For more information, see the Xenia wiki.</p>
             <table class="xeniaTable">
                 <tr>
-                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+45410811')">Xenia</button></th>
-                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+45410811')">Xenia Canary</button></th>
-                    <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%2045410811&type=code')">Find patches</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/xenia-canary/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia Canary</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%2000000000&type=code')" alt="">Find patches</button></th>
                 </tr>
             </table>
-			<br>
-			<h1 class="desc">Capabilities</h1>
+            <br>
+            <h1 class="desc">Capabilities</h1>
             <table class="capabilitiesTable">
                 <tr>
-                    <th><button>Xbox Live</button></th>
-                    <th><button>SystemLink</button></th>
-                    <th><button>Coop</button></th>
+                    
                 </tr>
             </table>
         </div>
     </div>
     <br>
     <br>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a64aee5fe4eb0c7',t:'MTcyMTQ5NjY2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -31,6 +31,7 @@ def fetch_xml_from_url(url, titleId, max_retries=5, backoff_factor=1):
         print(f"Failed to fetch XML data after {max_retries} attempts.")
         return None
     else:
+        print(f"Loaded cache: {cache}")
         with open(cache, 'r', encoding='utf-8') as file:
             return file.read()
 
@@ -47,9 +48,7 @@ def get_fields_from_xml(xml):
     global_original_release_date = root.find('.//globalOriginalReleaseDate', namespaces)
     publisher_name = root.find('.//publisherName', namespaces)
     developer_name = root.find('.//developerName', namespaces)
-    images = root.findall('.//image/fileUrl', namespaces)
-    game_capabilities = root.find('.//gameCapabilities', namespaces)
-    
+    images = root.findall('.//image/fileUrl', namespaces)    
     full_description_text = full_description.text if full_description is not None else "N/A"
     full_title_text = full_title.text if full_title is not None else "N/A"
     global_original_release_date_text = global_original_release_date.text if global_original_release_date is not None else "N/A"
@@ -58,15 +57,13 @@ def get_fields_from_xml(xml):
     image_urls = [img.text for img in images] if images is not None else "N/A"
     
     gameInfo = ""
-
-    if game_capabilities is not None:
-        # Check if onlineLeaderboards element exists
-        if game_capabilities.find('onlineMultiplayerMin') is not None:
-            gameInfo += "<th><button>Xbox Live</button></th>"
-        if game_capabilities.find('offlineSystemLinkMin') is not None:
-            gameInfo += "<th><button>SystemLink</button></th>"
-        if game_capabilities.find('onlineCoopPlayersMin') is not None:
-            gameInfo += "<th><button>Coop</button></th>"
+    # Check if onlineLeaderboards element exists
+    if root.find('.//onlineMultiplayerMin', namespaces) is not None:
+        gameInfo += "<th><button>Xbox Live</button></th>"
+    if root.find('.//offlineSystemLinkMin', namespaces) is not None:
+        gameInfo += "<th><button>SystemLink</button></th>"
+    if root.find('.//onlineCoopPlayersMin', namespaces) is not None:
+        gameInfo += "<th><button>Coop</button></th>"
 
     try:
         date_obj = datetime.strptime(global_original_release_date_text, "%Y-%m-%dT%H:%M:%S")

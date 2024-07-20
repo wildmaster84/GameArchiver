@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UEFA CL 2006-2007</title>
+    <title>Indie Game</title>
+    <link rel="icon" type="image/png" href="./tile.png">
     <style>
         .banner {
             position: relative;
@@ -13,8 +14,9 @@
 
         .background-image {
             width: 100%;
-            height: auto;
-            filter: blur(8px);
+            height: 45vh;
+            filter: blur(8px) brightness(50%);
+            object-fit: cover;
         }
 
         .overlay-image {
@@ -22,7 +24,6 @@
             top: 10%;
             left: 5%;
             width: 10%;
-            /* Adjust the size as needed */
             height: auto;
         }
 
@@ -45,7 +46,7 @@
             color: white;
             font-size: 25px;
             max-width: 100%;
-            margin-top: 2%;
+            margin-top: 10%;
         }
 
         .description {
@@ -75,6 +76,13 @@
         }
 
         .xeniaTable {
+            border-collapse: collapse;
+            position: relative;
+            left: 5%;
+            text-align: center;
+        }
+		
+		.capabilitiesTable {
             border-collapse: collapse;
             position: relative;
             left: 5%;
@@ -118,6 +126,7 @@
             background-color: rgb(52 58 61);
             color: white;
             font-size: large;
+            cursor: pointer;
         }
 
         tr:nth-child(even) {
@@ -172,7 +181,7 @@
 
 <body style="background:black;height:100%;font-family: arial, sans-serif;overflow-x: clip;">
     <div class="banner">
-        <img src="./banner.png"
+        <img src="./background.jpg"
             class="background-image">
         <img src="./boxartlg.jpg"
             class="overlay-image">
@@ -211,6 +220,15 @@
                     <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+45410811')">Xenia</button></th>
                     <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+45410811')">Xenia Canary</button></th>
                     <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%2045410811&type=code')">Find patches</button></th>
+                </tr>
+            </table>
+			<br>
+			<h1 class="desc">Capabilities</h1>
+            <table class="capabilitiesTable">
+                <tr>
+                    <th><button>Xbox Live</button></th>
+                    <th><button>SystemLink</button></th>
+                    <th><button>Coop</button></th>
                 </tr>
             </table>
         </div>

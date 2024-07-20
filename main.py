@@ -7,20 +7,32 @@ import time
 import re
 import shutil
 
-def fetch_xml_from_url(url, max_retries=5, backoff_factor=1):
-    retries = 0
-    while retries < max_retries:
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            return response.text
-        except requests.RequestException as e:
-            retries += 1
-            wait_time = backoff_factor * retries
-            print(f"Error fetching XML data: {e}. Retrying in {wait_time} seconds...")
-            time.sleep(wait_time)
-    print(f"Failed to fetch XML data after {max_retries} attempts.")
-    return None
+def fetch_xml_from_url(url, titleId, max_retries=5, backoff_factor=1):
+    cache_dir = Path(__file__).parent.resolve() / "cache"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    titleId += ".xml"
+    cache = Path(cache_dir) / titleId
+    if not cache.exists():
+        print(f"Caching : {cache}")
+        retries = 0
+        while retries < max_retries:
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                with open(cache, 'wb') as file:
+                    file.write(response.content)
+            
+                return response.text
+            except requests.RequestException as e:
+                retries += 1
+                wait_time = backoff_factor * retries
+                print(f"Error fetching XML data: {e}. Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+        print(f"Failed to fetch XML data after {max_retries} attempts.")
+        return None
+    else:
+        with open(cache, 'r', encoding='utf-8') as file:
+            return file.read()
 
 def get_fields_from_xml(xml):
     namespaces = {
@@ -36,6 +48,7 @@ def get_fields_from_xml(xml):
     publisher_name = root.find('.//publisherName', namespaces)
     developer_name = root.find('.//developerName', namespaces)
     images = root.findall('.//image/fileUrl', namespaces)
+    game_capabilities = root.find('.//gameCapabilities', namespaces)
     
     full_description_text = full_description.text if full_description is not None else "N/A"
     full_title_text = full_title.text if full_title is not None else "N/A"
@@ -43,6 +56,17 @@ def get_fields_from_xml(xml):
     publisher_name_text = publisher_name.text if publisher_name is not None else "N/A"
     developer_name_text = developer_name.text if developer_name is not None else "N/A"
     image_urls = [img.text for img in images] if images is not None else "N/A"
+    
+    gameInfo = ""
+
+    if game_capabilities is not None:
+        # Check if onlineLeaderboards element exists
+        if game_capabilities.find('onlineMultiplayerMin') is not None:
+            gameInfo += "<th><button>Xbox Live</button></th>"
+        if game_capabilities.find('offlineSystemLinkMin') is not None:
+            gameInfo += "<th><button>SystemLink</button></th>"
+        if game_capabilities.find('onlineCoopPlayersMin') is not None:
+            gameInfo += "<th><button>Coop</button></th>"
 
     try:
         date_obj = datetime.strptime(global_original_release_date_text, "%Y-%m-%dT%H:%M:%S")
@@ -56,7 +80,8 @@ def get_fields_from_xml(xml):
         'releaseDate': formatted_date,
         'publisherName': publisher_name_text,
         'developerName': developer_name_text,
-        'imageUrls': image_urls
+        'imageUrls': image_urls,
+        'capabilities': gameInfo
     }
 
 def save_images(image_urls, save_dir, default_image_path, max_retries=3, backoff_factor=1):
@@ -85,22 +110,7 @@ def save_images(image_urls, save_dir, default_image_path, max_retries=3, backoff
                     time.sleep(wait_time)
             else:
                 # Save the default image if the download fails after retries
-                image_name = url.split("/")[-1]
-                save_path = Path(save_dir) / image_name
-                if pattern.search(image_name):
-                    shutil.copy(Path(default_image_path) / 'screenlg1.jpg', save_path)
-                    print(f"Default image saved to {save_path} due to download failure.")
-                if banner.search(image_name):
-                    shutil.copy(Path(default_image_path) / 'banner.png', save_path)
-                    print(f"Default image saved to {save_path} due to download failure.")
-                if boxartlg.search(image_name):
-                    shutil.copy(Path(default_image_path) / 'boxartlg.jpg', save_path)
-                    print(f"Default image saved to {save_path} due to download failure.")
-                if background.search(image_name):
-                    shutil.copy(Path(default_image_path) / 'background.jpg', save_path)
-                    print(f"Default image saved to {save_path} due to download failure.")
-                else:
-                    print(f"Skipping {save_path} due to download failure.")
+                print(f"Skipping {save_path} due to download failure.")
 
 def process_file(local_file):
     with open('template.html', 'r', encoding='utf-8') as template_file:
@@ -121,7 +131,7 @@ def process_file(local_file):
                 print(f"Saving: {dirs}")
                 new_url = "http://marketplace-xb.xboxlive.com/marketplacecatalog/v1/product/en-US/66ACD000-77FE-1000-9115-D802{id}?bodytypes=1.3&detailview=detaillevel5&pagenum=1&pagesize=1&stores=1&tiers=2.3&offerfilter=1&producttypes=1.5.18.19.20.21.22.23.30.34.37.46.47.61"
                 market_url = new_url.replace('{id}', id)
-                xml_data = fetch_xml_from_url(market_url)
+                xml_data = fetch_xml_from_url(market_url, id)
                 if xml_data:
                     fields = get_fields_from_xml(xml_data)
                     pattern = re.compile(r'screenlg\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
@@ -140,6 +150,7 @@ def process_file(local_file):
                     content = content.replace('{developerName}', fields["developerName"])
                     content = content.replace('{releaseDate}', fields["releaseDate"])
                     content = content.replace('{publisherName}', fields["publisherName"])
+                    content = content.replace('{capabilities}', fields["capabilities"])
                     content = content.replace('{gallery}', gallery)
                     filename = dirs / "index.html"
                     with open(filename, mode='w+', encoding='utf-8') as file:
@@ -152,6 +163,6 @@ def process_file(local_file):
             home_file.write(entry + "\n")
 
 try:
-    process_file('Games2.csv')
+    process_file('Games.csv')
 except Exception as e:
     print(e)

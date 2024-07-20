@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+    <link rel="icon" type="image/png" href="./tile.png">
     <style>
         .banner {
             position: relative;
@@ -13,8 +14,9 @@
 
         .background-image {
             width: 100%;
-            height: auto;
-            filter: blur(8px);
+            height: 45vh;
+            filter: blur(8px) brightness(50%);
+            object-fit: cover;
         }
 
         .overlay-image {
@@ -44,7 +46,7 @@
             color: white;
             font-size: 25px;
             max-width: 100%;
-            margin-top: 2%;
+            margin-top: 10%;
         }
 
         .description {
@@ -117,6 +119,7 @@
             background-color: rgb(52 58 61);
             color: white;
             font-size: large;
+            cursor: pointer;
         }
 
         tr:nth-child(even) {
@@ -171,10 +174,10 @@
 
 <body style="background:black;height:100%;font-family: arial, sans-serif;overflow-x: clip;">
     <div class="banner">
-        <img src="./banner.png"
-            class="background-image">
+        <img src="./background.jpg"
+            class="background-image" alt="">
         <img src="./boxartlg.jpg"
-            class="overlay-image">
+            class="overlay-image" alt="">
         <p class="game-title" style="color:white">{title}</p>
         <p class="publisher" style="color:gray">{developerName}</p>
     </div>
@@ -207,14 +210,21 @@
             <p class="description">Xenia is an experimental emulator for the Xbox 360. For more information, see the Xenia wiki.</p>
             <table class="xeniaTable">
                 <tr>
-                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{id}')">Xenia</button></th>
-                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{id}')">Xenia Canary</button></th>
-                    <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%20{id}&type=code')">Find patches</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{id}')" alt="">Xenia</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{id}')" alt="">Xenia Canary</button></th>
+                    <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%20{id}&type=code')" alt="">Find patches</button></th>
+                </tr>
+            </table>
+            <br>
+            <h1 class="desc">Capabilities</h1>
+            <table class="capabilitiesTable">
+                <tr>
+                    {capabilities}
                 </tr>
             </table>
         </div>
     </div>
     <br>
     <br>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a5c91b8abccbfa8',t:'MTcyMTQxMTU4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a5d22404ce47bbd',t:'MTcyMTQxNzUwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

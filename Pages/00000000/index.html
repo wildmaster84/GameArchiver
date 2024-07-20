@@ -145,6 +145,7 @@
             margin-right: 10px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
         .gallery-item {
@@ -164,20 +165,67 @@
                 height: 100px;
             }
         }
+        .fullscreen-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .fullscreen-container img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .fullscreen-container.active {
+            display: flex;
+        }
     </style>
     <script>
         function openInNewTab(url) {
             window.open(url, '_blank').focus();
         }
+        function toggleFullscreen(imageSrc) {
+            const fullscreenContainer = document.getElementById('fullscreen-container');
+            const fullscreenImage = document.getElementById('fullscreen-image');
+            fullscreenImage.src = imageSrc;
+            fullscreenContainer.classList.add('active');
+        }
+
+        function closeFullscreen() {
+            const fullscreenContainer = document.getElementById('fullscreen-container');
+            fullscreenContainer.classList.remove('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const galleryImages = document.querySelectorAll('.gallery img');
+            galleryImages.forEach(img => {
+                img.addEventListener('click', function () {
+                    toggleFullscreen(this.src);
+                });
+            });
+            
+            const bannerImages = document.querySelectorAll('img');
+            bannerImages.forEach(img => {
+                img.setAttribute('draggable', 'false');
+            });
+
+            const fullscreenContainer = document.getElementById('fullscreen-container');
+            fullscreenContainer.addEventListener('click', closeFullscreen);
+        });
     </script>
 </head>
 
 <body style="background:black;height:100%;font-family: arial, sans-serif;overflow-x: clip;">
     <div class="banner">
-        <img src="./background.jpg"
-            class="background-image" alt="">
-        <img src="./boxartlg.jpg"
-            class="overlay-image" alt="">
+        <img src="./background.jpg" class="background-image" alt="">
+        <img src="./boxartlg.jpg"class="overlay-image" alt="">
         <p class="game-title" style="color:white">Indie Game</p>
         <p class="publisher" style="color:lightgray">N/A</p>
     </div>
@@ -226,5 +274,8 @@
     </div>
     <br>
     <br>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a64aee5fe4eb0c7',t:'MTcyMTQ5NjY2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <div id="fullscreen-container" class="fullscreen-container">
+        <img id="fullscreen-image" src="" alt="Fullscreen Image" draggable="false" style="cursor:pointer;">
+    </div>
+</body>
 </html>

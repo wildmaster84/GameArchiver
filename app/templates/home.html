@@ -90,11 +90,11 @@
 <body>
     <h1>Total Games Archived: {{ total }}</h1>
     <div class="container">
-        {% for dir, full_path in directories %}
+        {% for dir in directories %}
         <div class="directory">
-            <a href="{{ full_path.split('/')[-1] }}">
-                <img src="http://{{ hostname }}/{{ full_path.split('/')[-1] }}/boxartlg.jpg" alt="{{ full_path.split('/')[-1] }}">
-                <p>{{ full_path.split('/')[-1] }}</p>
+            <a href="http://{{ hostname }}/{{ dir[0] }}">
+                <img src="http://{{ hostname }}/{{ dir[0] }}/boxartlg.jpg" alt="{{ dir[0] }}">
+                <p>{{ dir[0] }}</p>
             </a>
         </div>
         {% endfor %}

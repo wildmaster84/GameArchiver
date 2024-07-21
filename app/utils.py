@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime
 import re
+from werkzeug.utils import safe_join
 
 def chunk_array(array, chunk_size):
     for i in range(0, len(array), chunk_size):
@@ -72,7 +73,6 @@ def get_fields_from_xml(xml):
     }
 
 def rebuild_index(id):
-    from flask import safe_join
     with open('template.html', 'r', encoding='utf-8') as template_file:
         template = template_file.read()
     

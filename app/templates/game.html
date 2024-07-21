@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title}</title>
-    <link rel="icon" type="image/png" href="./{id}/tile.png">
+    <title>{{ title }}</title>
+    <link rel="icon" type="image/png" href="{{ id }}/tile.png">
     <style>
          body {
             background-color: #121212;
@@ -251,12 +251,12 @@
 
 <body>
     <div class="banner">
-        <img src="./{id}/background.jpg" class="background-image" alt="">
+        <img src="{{ id }}/background.jpg" class="background-image" alt="">
         <div class="overlay-content">
-            <img src="./{id}/boxartlg.jpg" class="overlay-image" alt="">
+            <img src="{{ id }}/boxartlg.jpg" class="overlay-image" alt="">
             <div>
-                <p class="game-title">{title}</p>
-                <p class="publisher">{developerName}</p>
+                <p class="game-title">{{ title }}</p>
+                <p class="publisher">{{ developerName }}</p>
             </div>
         </div>
     </div>
@@ -265,7 +265,7 @@
         <div class="flex-container">
             <div class="gameDesc">
                 <h1 class="desc">Description</h1>
-                <p class="description">{description}</p>
+                <p class="description">{{ description }}</p>
                 <table class="descTable">
                     <tr>
                         <th>Published by</th>
@@ -273,9 +273,9 @@
                         <th>Release date</th>
                     </tr>
                     <tr>
-                        <td>{publisherName}</td>
-                        <td>{developerName}</td>
-                        <td>{releaseDate}</td>
+                        <td>{{ publisherName }}</td>
+                        <td>{{ developerName }}</td>
+                        <td>{{ releaseDate }}</td>
                     </tr>
                 </table>
             </div>
@@ -284,16 +284,18 @@
                 <p class="description">Xenia is an experimental emulator for the Xbox 360. For more information, see the Xenia wiki.</p>
                 <table class="xeniaTable">
                     <tr>
-                        <th><button class="btn" onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia</button></th>
-                        <th><button class="btn" onclick="openInNewTab('https://github.com/xenia-canary/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia Canary</button></th>
-                        <th><button class="btn" onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%2000000000&type=code')" alt="">Find patches</button></th>
+                        <th><button class="btn" onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{{ id }}')" alt="">Xenia</button></th>
+                        <th><button class="btn" onclick="openInNewTab('https://github.com/xenia-canary/game-compatibility/issues?q=is%3Aissue+is%3Aopen+{{ id }}')" alt="">Xenia Canary</button></th>
+                        <th><button class="btn" onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%20{{ id }}&type=code')" alt="">Find patches</button></th>
                     </tr>
                 </table>
                 <br>
                 <h1 class="desc">Capabilities</h1>
                 <table class="capabilitiesTable">
                     <tr>
-                        {capabilities}
+                        {% for capability in capabilities %}
+                        <th><button class="btn">{{ capability }}</button></th>
+                        {% endfor %}
                     </tr>
                 </table>
             </div>
@@ -303,7 +305,9 @@
         <div class="flex-gallery-container">
             <div class="gallery-container">
                 <div class="gallery">
-                    {gallery}
+                    {% for image in gallery %}
+                    <div class="gallery-item"><img src="{{ id }}/{{ image }}" alt="image"></div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -313,5 +317,5 @@
     <div id="fullscreen-container" class="fullscreen-container">
         <img id="fullscreen-image" src="" alt="Fullscreen Image" draggable="false" style="cursor:pointer;">
     </div>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a6bcccdda6d53d5',t:'MTcyMTU3MTI5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a6c3c0f8974bcc5',t:'MTcyMTU3NTg1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a6c4ed5b9691d70',t:'MTcyMTU3NjYyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a6c98fb5e68b0e5',t:'MTcyMTU3OTY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

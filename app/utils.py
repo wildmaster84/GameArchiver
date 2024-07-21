@@ -3,6 +3,18 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 import re
 from werkzeug.utils import safe_join
+import json
+
+def HOME_DIRECTORY():
+     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Pages'))
+def CACHE_DIRECTORY(): 
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'cache'))
+def DEFAULT_IMAGE_DIR(): 
+    return os.path.join(HOME_DIRECTORY(), '00000000')
+def CRUMBS(): 
+    with open(f'{CACHE_DIRECTORY()}/data.json', 'r') as f:
+        data = json.load(f)
+    return data
 
 def chunk_array(array, chunk_size):
     for i in range(0, len(array), chunk_size):
@@ -48,13 +60,13 @@ def get_fields_from_xml(xml):
     developer_name_text = developer_name.text if developer_name is not None else "N/A"
     image_urls = [img.text for img in images] if images is not None else []
 
-    game_info = ""
+    game_info = []
     if root.find('.//onlineMultiplayerMin', namespaces) is not None:
-        game_info += "<th><button class=\"btn\">Xbox Live</button></th>"
+        game_info.append("Xbox Live")
     if root.find('.//offlineSystemLinkMin', namespaces) is not None:
-        game_info += "<th><button class=\"btn\">SystemLink</button></th>"
+        game_info.append("SystemLink")
     if root.find('.//onlineCoopPlayersMin', namespaces) is not None:
-        game_info += "<th><button class=\"btn\">Coop</button></th>"
+        game_info.append("Coop")
 
     try:
         date_obj = datetime.strptime(global_original_release_date_text, "%Y-%m-%dT%H:%M:%S")
@@ -72,13 +84,10 @@ def get_fields_from_xml(xml):
         'capabilities': game_info
     }
 
-def rebuild_index(id):
-    with open('template.html', 'r', encoding='utf-8') as template_file:
-        template = template_file.read()
-    
+def rebuild_index(id, collected_data):    
     with open(safe_join('cache', f"{id.lower()}.xml"), 'r', encoding='utf-8') as xml:
         xml_data = xml.read()
-    gallery = ""
+    gallery = []
     fields = get_fields_from_xml(xml_data)
     pattern = re.compile(r'screenlg\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
     
@@ -86,16 +95,14 @@ def rebuild_index(id):
         image_name = imgUrl.split("/")[-1]
         if pattern.search(image_name):
             if image_name not in gallery:
-                gallery += f'<div class="gallery-item"><img src="{id}/{image_name}" alt="image"></div>'
+                gallery.append(image_name)
     
-    content = template.replace('{title}', fields["title"])
-    content = content.replace('{id}', id)
-    content = content.replace('{description}', fields["description"])
-    content = content.replace('{developerName}', fields["developerName"])
-    content = content.replace('{releaseDate}', fields["releaseDate"])
-    content = content.replace('{publisherName}', fields["publisherName"])
-    content = content.replace('{capabilities}', fields["capabilities"])
-    content = content.replace('{gallery}', gallery)
-    filename = f"Pages/{id}/index.html"
-    with open(filename, mode='w+', encoding='utf-8') as file:
-        file.write(content)
+    collected_data[id] = {
+        "title": fields["title"], 
+        "description": fields["description"], 
+        "releaseDate": fields["releaseDate"], 
+        "publisherName": fields["publisherName"], 
+        "developerName": fields["developerName"], 
+        "capabilities": fields["capabilities"], 
+        "gallery": gallery
+    }

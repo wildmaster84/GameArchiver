@@ -5,41 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indie Game</title>
-    <link rel="icon" type="image/png" href="./tile.png">
+    <link rel="icon" type="image/png" href="./00000000/tile.png">
     <style>
+         body {
+            background-color: #121212;
+            color: #f1f1f1;
+            font-family: 'Arial', sans-serif;
+            overflow-x: clip;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .banner {
             position: relative;
-            width: max-content;
-            min-width: -webkit-fill-available;
+            width: 100%;
+            height: 45vh;
+            overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .background-image {
             width: 100%;
-            height: 45vh;
+            height: 100%;
             filter: blur(8px) brightness(50%);
             object-fit: cover;
         }
 
-        .overlay-image {
+        .overlay-content {
             position: absolute;
-            top: 10%;
+            top: 50%;
             left: 5%;
-            width: 10%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .overlay-image {
+            width: 150px;
             height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-right: 20px;
         }
 
         .game-title {
-            position: absolute;
-            top: 1%;
-            left: 16%;
-            font-size: xxx-large;
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
         }
 
         .publisher {
-            position: absolute;
-            top: 17%;
-            left: 16%;
-            font-size: xx-large;
+            font-size: 1.5em;
+            color: #aaaaaa;
         }
 
         .gallerytxt {
@@ -105,15 +124,18 @@
             color: white;
         }
 
-        button {
-            border: transparent;
-            border-radius: 25px;
-            text-align: left;
-            padding: 5px 15px;
+        .btn {
             background-color: rgb(52 58 61);
             color: white;
-            font-size: large;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5vh 2vh;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: rgb(34 38 41);
         }
         
         tr:nth-child(even) {
@@ -138,11 +160,16 @@
             margin-right: 10px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
         }
 
         .gallery-item {
             display: inline-block;
+            cursor: pointer !important;
         }
 
         @media (max-width: 768px) {
@@ -181,15 +208,13 @@
             display: flex;
         }
 
-        .no-drag {
+        .overlay-content img,
+        .banner img {
             -webkit-user-drag: none;
             -khtml-user-drag: none;
             -moz-user-drag: none;
             -o-user-drag: none;
             user-drag: none;
-        }
-
-        .no-right-click {
             pointer-events: none;
         }
     </style>
@@ -224,12 +249,16 @@
     </script>
 </head>
 
-<body style="background:black;height:100%;font-family: arial, sans-serif;overflow-x: clip;width: -webkit-fill-available;">
+<body>
     <div class="banner">
-        <img src="./background.jpg" class="background-image no-drag no-right-click" alt="">
-        <img src="./boxartlg.jpg" class="overlay-image no-drag no-right-click" alt="">
-        <p class="game-title" style="color:white">Indie Game</p>
-        <p class="publisher" style="color:lightgray">N/A</p>
+        <img src="./00000000/background.jpg" class="background-image" alt="">
+        <div class="overlay-content">
+            <img src="./00000000/boxartlg.jpg" class="overlay-image" alt="">
+            <div>
+                <p class="game-title">Indie Game</p>
+                <p class="publisher">N/A</p>
+            </div>
+        </div>
     </div>
     <br>
     <div class="container">
@@ -255,9 +284,9 @@
                 <p class="description">Xenia is an experimental emulator for the Xbox 360. For more information, see the Xenia wiki.</p>
                 <table class="xeniaTable">
                     <tr>
-                        <th><button onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia</button></th>
-                        <th><button onclick="openInNewTab('https://github.com/xenia-canary/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia Canary</button></th>
-                        <th><button onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%2000000000&type=code')" alt="">Find patches</button></th>
+                        <th><button class="btn" onclick="openInNewTab('https://github.com/xenia-project/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia</button></th>
+                        <th><button class="btn" onclick="openInNewTab('https://github.com/xenia-canary/game-compatibility/issues?q=is%3Aissue+is%3Aopen+00000000')" alt="">Xenia Canary</button></th>
+                        <th><button class="btn" onclick="openInNewTab('https://github.com/search?q=repo%3Axenia-canary%2Fgame-patches%2000000000&type=code')" alt="">Find patches</button></th>
                     </tr>
                 </table>
                 <br>
@@ -274,7 +303,7 @@
         <div class="flex-gallery-container">
             <div class="gallery-container">
                 <div class="gallery">
-                    <div class="gallery-item"><img src="./screenlg1.jpg" alt="image"></div>
+                    <div class="gallery-item"><img src="00000000/screenlg1.jpg" alt="image"></div>
                 </div>
             </div>
         </div>
@@ -284,5 +313,5 @@
     <div id="fullscreen-container" class="fullscreen-container">
         <img id="fullscreen-image" src="" alt="Fullscreen Image" draggable="false" style="cursor:pointer;">
     </div>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'8a67dfe0bc19b032',t:'MTcyMTUzMDEzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

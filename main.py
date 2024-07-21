@@ -162,6 +162,6 @@ def process_file(local_file):
             home_file.write(entry + "\n")
 
 try:
-    process_file('Games.csv')
+    process_file('Games2.csv')
 except Exception as e:
     print(e)

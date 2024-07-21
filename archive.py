@@ -135,31 +135,8 @@ def process_file(local_file):
                     fields = get_fields_from_xml(xml_data)
                     pattern = re.compile(r'screenlg\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
                     save_images(fields['imageUrls'], dirs, f'{Pages_dir}/00000000')
-                    for imgUrl in fields['imageUrls']:
-                        image_name = imgUrl.split("/")[-1]
-                        if pattern.search(image_name):
-                            if image_name not in gallery:
-                                gallery += f'<div class="gallery-item"><img src="./{image_name}" alt="image"></div>'
-                    GameEntry = f"## ![](./tile.png) [{fields['title']}](Pages/{id}/index.html)"
-                    Entries.append((fields['title'], GameEntry))
-                    content = template.replace('{title}', fields["title"])
-                    content = content.replace('{id}', id)
-                    content = content.replace('{market_url}', market_url)
-                    content = content.replace('{description}', fields["description"])
-                    content = content.replace('{developerName}', fields["developerName"])
-                    content = content.replace('{releaseDate}', fields["releaseDate"])
-                    content = content.replace('{publisherName}', fields["publisherName"])
-                    content = content.replace('{capabilities}', fields["capabilities"])
-                    content = content.replace('{gallery}', gallery)
-                    filename = dirs / "index.html"
-                    with open(filename, mode='w+', encoding='utf-8') as file:
-                        file.write(content)
             else:
                 print(f"Skipping: {dirs}")
-    with open("Home.md", "w") as home_file:
-        sorted_titles_and_values = sorted(Entries, key=lambda x: x[0].lower())
-        for title, entry in sorted_titles_and_values:
-            home_file.write(entry + "\n")
 
 try:
     process_file('Games2.csv')

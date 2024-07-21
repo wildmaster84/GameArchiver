@@ -1,7 +1,7 @@
 # Setting up
 In order for this to work, you must have a cvs file that contains all the title ids.
-Once you place the Games.cvs file next to main.py, run it until its done.
-main.py will cache and save the data pulled from the marketplace.
+Once you place the Games.cvs file next to archive.py, run it until its done.
+archive.py will cache and save the data pulled from the marketplace.
 finally, run the run.py to start the webserver and your done.
 
 # Templates

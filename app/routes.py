@@ -41,12 +41,11 @@ def before_request_func():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    path = request.path
+    path = request.path.strip()
     parent_dir = os.path.dirname(path)
     if path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
         # Extract the image name
         image_name = os.path.basename(path)
-        # Serve the default image
         print(f"Missing image: {path}")
         return send_from_directory(DEFAULT_IMAGE_DIR(), image_name)
     else:
@@ -62,8 +61,28 @@ def internal_server_error(e):
 def search():
     game_data = CRUMBS()
     query = request.args.get('q', '').lower()
+    page = request.args.get('page', 1, type=int)
+    chunk_size = 14
     results = [(id, data) for id, data in game_data.items() if query in data['title'].lower() or query in id.lower()]
-    return render_template('search.html', directories=results, total=len(results), page=1, total_pages=1, hostname=request.host, max=max, min=min)
+    paged_results = list(chunk_array(results, chunk_size))
+    total_pages = len(paged_results)
+    
+    if page < 1 or page > total_pages:
+        page = 1 
+    
+    current_page_results = paged_results[page-1] if paged_results else []
+    
+    return render_template(
+        'search.html', 
+        directories=current_page_results, 
+        total=len(results), 
+        page=page, 
+        total_pages=total_pages, 
+        hostname=request.host,
+        query=query,
+        max=max, 
+        min=min
+    )
 
 @app.route('/')
 @app.route('/page/<int:page>')
@@ -79,7 +98,6 @@ def index(page=1):
 
     # Get the full paths
     directories_with_data = [(name, collected_data[name]) for name in paged_directories[page-1]]
-
     return render_template(
         'home.html', 
         total=len(directories), 
@@ -97,7 +115,7 @@ def api_index():
 
 @app.route('/api/xml/<path:path>')
 def api_xml(path):
-    safe_file_id = safe_join(CACHE_DIRECTORY(), f"{path.lower()}.xml")
+    safe_file_id = safe_join(CACHE_DIRECTORY(), f"{path.strip().lower()}.xml")
     if os.path.exists(safe_file_id):
         return send_file(safe_file_id, as_attachment=False, mimetype='application/xml')
     else:
@@ -107,23 +125,24 @@ def api_xml(path):
 def api_json(path):
     
     for id, data in CRUMBS().items():
-        if len(path.lower()) == 8:
-            if path.lower() in id.lower():
+        if len(path.strip().lower()) == 8:
+            if path.strip().lower() in id.lower():
                 return CRUMBS()[id]
         else:
             return CRUMBS()["00000000"]
 
 @app.route('/<path:path>')
 def serve_file_or_directory(path):
-    full_path = safe_join(HOME_DIRECTORY(), path)
+    directory_id = path.strip().upper().split('/')[0]
+    image_name = os.path.basename(path)
+    full_path = safe_join(HOME_DIRECTORY(), f"{directory_id}/{image_name}")
     if is_image(full_path):
         if os.path.exists(full_path):
-            return send_from_directory(HOME_DIRECTORY(), path)
+            return send_from_directory(HOME_DIRECTORY(), f"{directory_id}/{image_name}")
         else:
             abort(404)
     
     collected_data = CRUMBS()
-    directory_id = path.split('/')[0]
     if directory_id in collected_data:
         data = collected_data[directory_id]
         return render_template(
@@ -135,7 +154,8 @@ def serve_file_or_directory(path):
             releaseDate=data["releaseDate"],
             publisherName=data["publisherName"],
             capabilities=data["capabilities"],
-            gallery=data["gallery"]
+            gallery=data["gallery"],
+            banner=data["banner"]
         )
     else:
         if len(directory_id) == 8:

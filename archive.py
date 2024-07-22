@@ -112,8 +112,6 @@ def save_images(image_urls, save_dir, default_image_path, max_retries=3, backoff
                 print(f"Skipping {save_path} due to download failure.")
 
 def process_file(local_file):
-    with open('template.html', 'r', encoding='utf-8') as template_file:
-        template = template_file.read()
 
     Pages_dir = Path(__file__).parent.resolve() / "Pages"
     Pages_dir.mkdir(parents=True, exist_ok=True)
@@ -139,6 +137,6 @@ def process_file(local_file):
                 print(f"Skipping: {dirs}")
 
 try:
-    process_file('Games2.csv')
+    process_file('Games.csv')
 except Exception as e:
     print(e)

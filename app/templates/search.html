@@ -108,7 +108,7 @@
         {% for id, data in directories %}
         <div class="directory">
             <a href="/{{ id }}">
-                <img src="{{ id }}/boxartlg.jpg" alt="{{ data['title'] }}">
+                <img src="{{ id }}/{{ data['banner'] }}" alt="{{ data['title'] }}">
                 <p>{{ data['title'] }}</p>
             </a>
         </div>

@@ -5,7 +5,11 @@ import requests
 from datetime import datetime
 import time
 import re
-import shutil
+import threading
+from concurrent.futures import ThreadPoolExecutor
+
+# Lock for synchronizing API request timing
+api_lock = threading.Lock()
 
 def fetch_xml_from_url(url, titleId, max_retries=5, backoff_factor=1):
     cache_dir = Path(__file__).parent.resolve() / "cache"
@@ -17,11 +21,16 @@ def fetch_xml_from_url(url, titleId, max_retries=5, backoff_factor=1):
         retries = 0
         while retries < max_retries:
             try:
+                # Ensure a delay between API requests
+                with api_lock:
+                    print("Waiting 3 seconds before API request...")
+                    time.sleep(3)
+
                 response = requests.get(url)
                 response.raise_for_status()
                 with open(cache, 'wb') as file:
                     file.write(response.content)
-            
+                
                 with open(cache, 'r', encoding='utf-8') as file:
                     return file.read()
                 
@@ -59,7 +68,6 @@ def get_fields_from_xml(xml):
     image_urls = [img.text for img in images] if images is not None else "N/A"
     
     gameInfo = ""
-    # Check if onlineLeaderboards element exists
     if root.find('.//onlineMultiplayerMin', namespaces) is not None:
         gameInfo += "<th><button>Xbox Live</button></th>"
     if root.find('.//offlineSystemLinkMin', namespaces) is not None:
@@ -85,10 +93,6 @@ def get_fields_from_xml(xml):
 
 def save_images(image_urls, save_dir, default_image_path, max_retries=3, backoff_factor=1):
     Path(save_dir).mkdir(parents=True, exist_ok=True)
-    pattern = re.compile(r'screenlg\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
-    banner = re.compile(r'banner\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
-    boxartlg = re.compile(r'boxartlg\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
-    background = re.compile(r'background\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
     valid_extensions = ('.jpg', '.jpeg', '.png', '.bmp')
     for url in image_urls:
         if url.lower().endswith(valid_extensions):
@@ -101,43 +105,39 @@ def save_images(image_urls, save_dir, default_image_path, max_retries=3, backoff
                     save_path = Path(save_dir) / image_name
                     with open(save_path, 'wb') as file:
                         file.write(response.content)
-                    break  # Exit the retry loop if successful
+                    break
                 except requests.RequestException as e:
                     retries += 1
                     wait_time = backoff_factor * retries
                     print(f"Error downloading the image from {url}: {e}. Retrying in {wait_time} seconds...")
                     time.sleep(wait_time)
-            else:
-                # Save the default image if the download fails after retries
-                print(f"Skipping {save_path} due to download failure.")
 
-def process_file(local_file):
+def process_row(row, pages_dir):
+    id = row['Title ID'].lower()
+    id_upper = row['Title ID'].upper()
+    dirs = pages_dir / id_upper
+    if not dirs.exists():
+        print(f"Saving: {dirs}")
+        new_url = "https://raw.githubusercontent.com/wildmaster84/restored-media/main/{id2}/{id}.xml"
+        market_url = new_url.replace('{id}', id).replace('{id2}', id_upper)
+        xml_data = fetch_xml_from_url(market_url, id)
+        if xml_data:
+            fields = get_fields_from_xml(xml_data)
+            save_images(fields['imageUrls'], dirs, f'{pages_dir}/00000000')
 
-    Pages_dir = Path(__file__).parent.resolve() / "Pages"
-    Pages_dir.mkdir(parents=True, exist_ok=True)
-
-    Entries = []
+def process_file_multithreaded(local_file):
+    pages_dir = Path(__file__).parent.resolve() / "Pages"
+    pages_dir.mkdir(parents=True, exist_ok=True)
 
     with open(local_file, mode='r', newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
-        for row in reader:
-            gallery = ""
-            id = row['Title ID'].lower()
-            id_lower = row['Title ID'].upper()
-            dirs = Pages_dir / id.upper()
-            if not dirs.exists():
-                print(f"Saving: {dirs}")
-                new_url = "https://raw.githubusercontent.com/wildmaster84/restored-media/main/{id}/{id2}"
-                market_url = new_url.replace('{id}', id).replace('{id2}', id_lower)
-                xml_data = fetch_xml_from_url(market_url, id)
-                if xml_data:
-                    fields = get_fields_from_xml(xml_data)
-                    pattern = re.compile(r'screenlg\d+\.(jpg|jpeg|png|bmp)$', re.IGNORECASE)
-                    save_images(fields['imageUrls'], dirs, f'{Pages_dir}/00000000')
-            else:
-                print(f"Skipping: {dirs}")
+        rows = list(reader)
+    
+    with ThreadPoolExecutor() as executor:
+        for row in rows:
+            executor.submit(process_row, row, pages_dir)
 
 try:
-    process_file('Games.csv')
+    process_file_multithreaded('Games.csv')
 except Exception as e:
     print(e)

@@ -123,11 +123,12 @@ def process_file(local_file):
         for row in reader:
             gallery = ""
             id = row['Title ID'].lower()
+            id_lower = row['Title ID'].upper()
             dirs = Pages_dir / id.upper()
             if not dirs.exists():
                 print(f"Saving: {dirs}")
-                new_url = "http://marketplace-xb.xboxlive.com/marketplacecatalog/v1/product/en-US/66ACD000-77FE-1000-9115-D802{id}?bodytypes=1.3&detailview=detaillevel5&pagenum=1&pagesize=1&stores=1&tiers=2.3&offerfilter=1&producttypes=1.5.18.19.20.21.22.23.30.34.37.46.47.61"
-                market_url = new_url.replace('{id}', id)
+                new_url = "https://raw.githubusercontent.com/wildmaster84/restored-media/main/{id}/{id2}"
+                market_url = new_url.replace('{id}', id).replace('{id2}', id_lower)
                 xml_data = fetch_xml_from_url(market_url, id)
                 if xml_data:
                     fields = get_fields_from_xml(xml_data)

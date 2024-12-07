@@ -7,13 +7,6 @@ import os
 import json
 from concurrent.futures import ThreadPoolExecutor
 
-
-def delete_existing_indexes():
-        for root, dirs, files in os.walk(HOME_DIRECTORY()):
-            for file in files:
-                if file == 'index.html':
-                    os.remove(os.path.join(root, file))
-
 def rebuild_all_indexes():
     collected_data = {}
 
@@ -28,6 +21,5 @@ def rebuild_all_indexes():
         json.dump(collected_data, json_file, indent=4)
 
 if __name__ == '__main__':
-    delete_existing_indexes()
     rebuild_all_indexes()
     app.run(host='0.0.0.0', port=10038, threaded=True)
